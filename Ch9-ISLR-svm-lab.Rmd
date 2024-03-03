@@ -55,9 +55,7 @@ We now create a data frame with the response coded as a factor.
 
 ```{r chunk2}
 dat <- data.frame(x = x, y = as.factor(y))
-library(e1071)
-svmfit <- svm(y ~ ., data = dat, kernel = "linear", 
-    cost = 10, scale = FALSE)
+6
 ```
 
 

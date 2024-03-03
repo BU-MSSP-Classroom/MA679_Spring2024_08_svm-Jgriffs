@@ -66,10 +66,36 @@ Test_COVID<- read_csv( "Test_COVID.zip")
 Use SVM to classify the patients that survive.  
 See if you can improve the performance over GAM or logistic regression from the previous chapters.
 
+##Costs specify how many values you allow to cross over the classification demarcation... can be chosen somewhat arbitrarily...
+#Figure out how long svms/iterations take to run at the start of the project, early in the timeframe... don't need to specify the type of outcome... kernel is not about the y... 
+
+#left off here
 Your code:
 ```{r,echo=TRUE}
-#
-#
+library(e1071)
+gTrain_COVID <- gTrain_COVID |>
+  select(-DATE_DIED)
+
+Half_One_Train_Covid <- gTrain_COVID |> 
+select(SURVIVED,USMER,MEDICAL_UNIT,SEX,PREGNANT,PATIENT_TYPE,INTUBED,PNEUMONIA,AGE,DIABETES,COPD,ASTHMA,INMSUPR)
+
+Half_Two_Train_Covid <- gTrain_COVID[,13:23]
+
+Columns <- dimnames(Half_Two_Train_Covid)
+Columnsall <- dimnames(gTrain_COVID)
+Columns <- as.vector(Columns[[2]])
+Columnsall <- as.vector(Columnsall[[2]])
+
+remainingcols <- setdiff(Columnsall,Columns)
+
+library(dplyr)
+TrainChunk <- slice_sample(Half_One_Train_Covid,n=100000,replace = FALSE)
+
+###had to scale down some things
+COVID_svm <- svm(SURVIVED ~ ., data = TrainChunk, kernel = "linear", cost = 10, scale = FALSE)
+summary(COVID_svm)
+plot(COVID_svm,TrainChunk)
+#plot isn't showing?
 ```
 
 Your answer:
